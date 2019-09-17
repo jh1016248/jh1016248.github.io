@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            position: absolute;
+            margin: 0;
+            top: 0;
+            left: 0;
+            right:0;
+            bottom:0;
+            overflow: hidden;
+        }
+        #video {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #canvas{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #capture{
+            position: absolute;
+            left: 50%;
+            bottom: 30px;
+            z-index: 1111;
+        }
+
+        video::-webkit-media-controls-fullscreen-button {
+            display: none;
+        }
+
+        video::-webkit-media-controls-play-button {}
+
+        video::-webkit-media-controls-timeline {}
+
+        video::-webkit-media-controls-current-time-display {}
+
+        video::-webkit-media-controls-time-remaining-display {}
+
+        video::-webkit-media-controls-mute-button {}
+
+        video::-webkit-media-controls-toggle-closed-captions-button {}
+
+        video::-webkit-media-controls-volume-slider {}
+    </style>
+</head>
+
+<body>
+    <video id="video"></video>
+    <select name="" style="margin: 20px;" id="cameraSelect"></select>
+    <div id="btnSelect" style="margin: 20px;">选择相机</div>
+    <canvas id="pictrueCanvas" style="opacity: 0; position: fixed; left: 1000%; top: 1000%;"></canvas>
+    <div id="text" style="position: absolute; bottom: 0; left: 0;">123123</div>
+    <!-- <div id="capture">截图</div> -->
+    <script src="js/adapter.min.js"></script>
+    <script src="js/NURBSCurve.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/NURBSCurve.min.js"></script>
+    <script src="js/NURBSUtils.min.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/inflate.min.js"></script>
+    <script src="js/FBXLoader.min.js"></script>
+    <script src="js/target.js?v3"></script>
+
+    <script>
+        var videoDeviceElement = document.getElementById('cameraSelect');
+        // drawCanvas()
+        function getCameraList() {
+            navigator.mediaDevices.enumerateDevices().then(i => {
+                i.map(e => {
+                    if ("videoinput" === e.kind) {
+                        const t = document.createElement("option");
+                        t.text = e.label || "camera " + (videoDeviceElement.length + 1).toString(),
+                            t.value = e.deviceId,
+                            videoDeviceElement.appendChild(t)
+                    }
+                })
+            })
+        }
+        var timer = null;
+        function drawCanvas() {
+            var count =  0;
+            loadCanvas();
+            timer = setInterval(() => {
+                checkPic().then(res =>{
+                }).catch( res => {
+                    if(res.statusCode === 0) {
+                        $('#text').innerText = JSON.stringify(res)
+                        let result = res.result;
+                        clearInterval(timer)
+                    }
+                });
+            }, 5 * 1000)
+        }
+        
+        $('#btnSelect').addEventListener('click', () => {
+            var cameraId = $("#cameraSelect").value
+            // var canvasElement = $("#canvas");
+            var videoElement = $("#video")
+            var i = {
+                audio: false,
+                video: {
+                    deviceId: {
+                        exact: cameraId
+                    }
+                }
+            }
+            var pictrueCanvas = $("#pictrueCanvas");
+            navigator.mediaDevices.getUserMedia(i).then(stream => {
+                videoElement.style.display = "block",
+                videoElement.style.width = document.body.offsetWidth + 'px';
+                setTimeout(function () {
+                    pictrueCanvas.setAttribute("width", document.body.offsetWidth + "px");
+                    pictrueCanvas.setAttribute("height", $("#video").offsetHeight + "px");
+                }, 1000)
+                videoElement.srcObject = stream
+                videoElement.onloadedmetadata = (() => {
+                        // canvasElement.setAttribute("width", window.innerWidth + "px"),
+                        // canvasElement.setAttribute("height", window.innerHeight + "px"),
+                        // window.innerWidth < window.innerHeight ? videoElement.offsetHeight < window.innerHeight && videoElement.setAttribute("height", window.innerHeight.toString() + "px") : videoElement.offsetWidth < window.innerWidth && videoElement.setAttribute("width", window.innerWidth.toString() + "px");
+                });
+                const s = videoElement.play();
+                s && s.then(e => {
+                    drawCanvas();
+                })
+            }).catch(e => {
+                alert(e)
+                console.log(e)
+            })
+        })
+
+
+      //注册拍照按钮的单击事件
+        // document.getElementById("capture").addEventListener("click",function(){
+        //     //绘制画面
+        //     var context = $("#canvas").getContext('2d');
+        //     context.drawImage($("#video"),0,0,480,320);
+        // });
+
+        function $(el) {
+            return document.querySelector(el)
+        }
+        getCameraList();;
+    </script>
+</body>
+
+</html>

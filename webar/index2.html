@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                };
+            recalc();
+            win.addEventListener(resizeEvt, recalc, false);
+        })(document, window)
+    </script>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+    <video id="video"></video>
+    <div id="btnSelect" class="active" >开始识别</div>
+    <div id="scan-line"></div>
+    <canvas id="pictrueCanvas" style="opacity: 0; position: fixed; left: 1000%; top: 1000%;"></canvas>
+    <div id="text" style="position: absolute; bottom: 0; left: 0; color: red; font-size: .3rem;">123123</div>
+
+    <script src="js/adapter.min.js"></script>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/NURBSCurve.min.js"></script>
+    <script src="js/NURBSUtils.min.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/inflate.min.js"></script>
+    <script src="js/FBXLoader.min.js"></script>
+    <script src="js/app.js?v2"></script>
+</body>
+</html>

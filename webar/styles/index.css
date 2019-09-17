@@ -1,0 +1,95 @@
+body {
+    font-size: .24rem;
+    position: fixed;
+    margin: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#video {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#scan-line {
+    display: block;
+    position: absolute;
+    width: 3.86rem;
+    height: .02rem;
+    top: 50%;
+    left: 50%;
+    margin-left: -1.98rem;
+    background: url(../images/scan-line.png) no-repeat;
+    background-size: 100%;
+    opacity: 0;
+}
+#scan-line.active{
+    opacity: 1;
+    animation: updown 3s infinite linear;
+}
+
+#capture {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    z-index: 1111;
+}
+
+#btnSelect {
+    position: absolute;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 30px;
+    bottom: 1rem;
+    background: #213001;
+    border-radius: 5px;
+    color: #fff;
+}
+#btnSelect.active{
+    opacity: 1;
+}
+
+video::-webkit-media-controls-fullscreen-button {
+    display: none;
+}
+
+video::-webkit-media-controls-play-button {}
+
+video::-webkit-media-controls-timeline {}
+
+video::-webkit-media-controls-current-time-display {}
+
+video::-webkit-media-controls-time-remaining-display {}
+
+video::-webkit-media-controls-mute-button {}
+
+video::-webkit-media-controls-toggle-closed-captions-button {}
+
+video::-webkit-media-controls-volume-slider {}
+
+
+@keyframes updown{
+    0%, 50%, 100% {
+        transform: translateY(0);
+    }
+    25%{
+        transform: translateY(-2rem);
+    }
+    75%{
+        transform: translateY(2rem);
+    }
+}
